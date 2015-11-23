@@ -1,0 +1,12 @@
+<!-- Controller : eTreeViewNodeController -->
+<div class="tree-view-node">
+    <div class="tree-view-node-label-container">
+        <i ng-click="opened = !opened" class="fa tree-view-node-toggler" ng-class="{'fa-folder' : !opened, 'fa-folder-open' : opened}" ng-show="hasChildren()"></i>
+        <span ng-click="select($event)" class="tree-view-node-label" ng-transclude></span>
+    </div>
+    <div ng-if="opened" class="tree-view-node-subcontainer">
+        <div ng-repeat="$item in getChildren()">
+            <div e-tree-view-node ></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="container-fluid e-tabs-panel">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="collapse navbar-collapse tabs-container" role="navigation">
+        <ul class="nav navbar-nav tabs-wrapper">
+            <li
+                    e-tab="tab"
+                    ng-if="tab.isVisible()"
+                    is-closable="isClosable"
+                    ng-repeat="(id, tab) in tabsController.visibleTabs">
+            </li>
+        </ul>
+
+
+    </div>
+    <ul class="nav navbar-nav navbar-right tabs-menu-btn" ng-show="tabsController.hiddenTabs.length > 0">
+        <li class="dropdown">
+            <a
+                    href="#"
+                    class="dropdown-toggle"
+                    data-toggle="dropdown"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                <i class="fa fa-angle-double-down"></i> <sup>{{tabsController.hiddenTabs.length}}</sup>
+                    </span></a>
+            <ul class="dropdown-menu">
+                <li
+                        e-tab="tab"
+                        need-to-reload-layout="true"
+                        is-closable="isClosable"
+                        ng-repeat="(id, tab) in tabsController.hiddenTabs">
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

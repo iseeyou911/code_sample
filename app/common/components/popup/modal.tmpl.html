@@ -1,0 +1,15 @@
+<!-- Controller : popupController -->
+<div class="modal-dialog"
+        ng-class="template.size">
+    <div class="modal-content">
+        <div class="modal-header dialog-header">
+            <button type="button" class="close"
+                    ng-click="popupController.close()"><span>&times;</span></button>
+
+            <h4 class="modal-title">{{getTitle()}}</h4>
+        </div>
+        <div class="modal-body dialog-body"  ng-class="{loading : context.isLoading()}">
+            <div e-transclude=""></div>
+        </div>
+    </div>
+</div>

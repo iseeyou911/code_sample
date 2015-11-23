@@ -1,0 +1,15 @@
+<div tabindex="0"
+     class="list-group e-suggestion-list"
+     ng-keyup="onKeyUp($event)"
+     ng-show="isVisible">
+    <span
+            class="list-group-item"
+            ng-if="!items || items.length === 0">
+        <h6>Соответсвующие элементы не найдены</h6>
+    </span>
+    <span
+            class="list-group-item"
+            tabindex="0"
+            ng-repeat="item in items" e-suggestion-item="item">
+    </span>
+</div>
