@@ -1,40 +1,45 @@
-# Dependencies
-`angular`
-`lodash`
-`jquery`
-`requireJS`
+# Dependencies 
+
+[AngularJS](https://angularjs.org/)
+[Lodash](https://lodash.com)
+[jQuery](https://jquery.com/)
+[RequireJS](http://requirejs.org/)
+[FontAwesome](https://fortawesome.github.io/Font-Awesome/)
+
+#License
+
+MIT
+
+#Collection 
+Particular realisation  of some interfaces from Java Collection
+
+`app/common/collections/linked-list` LinkedList
+
+`app/common/collections/hash-map` HashMap
+
+`app/common/collections/properties` Properties
+
+`app/common/collections/hash-set` HashSet
+
+`app/common/collections/enumerator` Enumerator
+
+`app/common/collections/iterator` Iterator
 
 # Components
+Usefull angular components, examples of usage and descriptions you may find in js files
 
-menu (Context menu service)
-popup (Popups, modal service)
-progress-bar (Popup progress bar service)
-suggestions-list (Suggestions list directive)
-tabs-panel (Responsive tabs directive)
-tree-view (Tree view directive)
+`app/common/components/menu` Context menu, service + directive. Menu items support user's markup.
+
+`app/common/components/popup` Modal, popup service + directive + factory, based on jQuery Modal, supports both styled modal dialog and unstyled popups. Also directive suppots parent controllers.
+
+`app/common/components/progress-bar` Simple propgress bar in modal window
+
+`app/common/components/suggestions-list` Suggestions dropdown with keyboard support. Suggestions items support user's markup.
+
+`app/common/components/tabs-panel` Responsive tabs. Tabs that doesn't fit to screen showed in dropdown menu
+
+`app/common/components/tree-view` Tree view, simple but powerfull, supports user's markup of items and user's expression for getting children
 
 # Directives
 
-`is-dirty` установка дефолтного значения $dirty
-`linker-directive-factory` фабрика диркетив для связки связки дочерней директивы с родительской
-`transclude-to` директивы для трасклюдинга элементов в другой узел DOM дерева, поддерживает множественное клонирование
-`e-mail-validation` валидация емейлов для ngModel
-`is-ident` валидация полей, значения которых должно быть равно значению другого поля (повторение пароля)
-`io-file` директива для работы с input type="file", позволяет получить доступ к списку выбранных файлов в scope
 
-# Collections (частичные реализации некоторых интерфейсов из Java Collections)
-
-`linked-list` LinkedList
-`hash-map` HashMap
-`hash-set` HashSet
-`properites` Properties
-`iterator` Iterator
-`enumerator` Enumnerator
-
-# Filters
-
-`byte` перевод значения из байтов в к,м,г-байты, поддерживает систему СИ
-
-# Services
-
-`file-downloader` сервис для скачивания файлов, поддерживает ajax загрузку и iframe 
