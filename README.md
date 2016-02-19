@@ -72,4 +72,4 @@ Usefull angular components, examples of usage and descriptions you may find in j
 
 `app/common/components/utils/string-utils` (deprecated) Partial implementation of Java StringUtils. Warn change prototype of String!
 
-`table-utils` Utils usefull for event's delegation with <table>
+`app/common/components/utils/table-utils` Utils usefull for event's delegation with <table>
