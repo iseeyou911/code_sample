@@ -7,8 +7,7 @@ define([
         'app/common/directives/form/is-email.validator.directive',
         'app/common/directives/form/io-file.directive',
         'app/common/directives/transclude-to.directive',
-        'app/common/directives/form/is-dirty.directive',
-        'app/common/directives/mask/mask.module'
+        'app/common/directives/form/is-dirty.directive'
     ],
     function (IsIdentValidation, isEmail, ioFileDirective, TranscludeToDirective, isDirtyDirective) {
         angular.module('common.directives', [
