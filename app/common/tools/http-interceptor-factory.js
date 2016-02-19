@@ -5,7 +5,7 @@ define([],
     function () {
         /**
          *
-         * This factory return ready to register http interceptor
+         * The factory return ready to register http interceptor
          *
          * @param {String} interceptorName
          * @param {function} interceptor

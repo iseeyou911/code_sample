@@ -2,8 +2,10 @@
  * Created by Timofey Novitskiy on 26.02.2015.
  */
 
-define([],
-    function () {
+define([
+        '_'
+    ],
+    function (_) {
         function ObjectUtils() {
         }
 
@@ -16,7 +18,7 @@ define([],
          */
         ObjectUtils.prototype.inherit = function inherit(Child, Parent) {
             var F = function () {
-                angular.extend(this, Child.prototype);
+                _.assign(this, Child.prototype);
                 delete this.constructor;
             };
 
@@ -25,7 +27,7 @@ define([],
 
             Child.prototype = new F();
             Child.prototype.constructor = Child;
-            Child.superclass = Parent.prototype;
+            Child.superclass = Parent;
             return Child;
         };
 
@@ -35,7 +37,7 @@ define([],
          * @param {Object} object
          * @returns {boolean}
          */
-        ObjectUtils.prototype.isAngularPromise = function isAngularDefer(object) {
+        ObjectUtils.prototype.isPromise = function isPromise(object) {
             return object != null
                 && typeof object === 'object'
                 && typeof object.then === 'function';
@@ -50,7 +52,7 @@ define([],
          * @param {*} value
          * @returns {Object}
          */
-        ObjectUtils.prototype.buildFromPath = function buildObjectFromPath(scope, _package, value) {
+        ObjectUtils.prototype.buildFromPath = function buildFromPath(scope, _package, value) {
             var _currentPackage;
             if (!_package) {
                 return;

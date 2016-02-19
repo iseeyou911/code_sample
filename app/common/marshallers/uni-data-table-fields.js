@@ -5,14 +5,12 @@ define([
     'app/common/marshallers/marshaller-factory',
     'app/core/uni-data/uni-data-table-fields',
     'app/common/marshallers/uni-data-table',
-    'app/common/collections/map/hash-map'
-], function (MarshallerFactory, UniDataTableFields,UniDataTableMarshaller, HashMap) {
-    var MarshallerUtils;
-
-    require(['app/common/marshallers/marshaller-utils'], function(_MarshallerUtils){
-        MarshallerUtils = _MarshallerUtils;
-    });
-
+    'app/common/collections/map/hash-map',
+    'app/common/marshallers/date',
+    'app/common/marshallers/uni-data',
+    'require',
+    '_'
+], function (MarshallerFactory, UniDataTableFields,UniDataTableMarshaller, HashMap, DateMarshaller, UniDataMarshaller, require, _) {
     return MarshallerFactory(
         /*Serialize*/
         function (uniDataTableFields) {
@@ -25,7 +23,7 @@ define([
 
             uniDataTableFields.attributes.putAll(jsonData.attributes || {});
 
-            angular.forEach(jsonData.fields || {}, function(field, fieldName){
+            _.forEach(jsonData.fields || {}, function(field, fieldName){
                 var type = field.type,
                     value = field.value;
 
@@ -40,11 +38,11 @@ define([
                 } else if (type === 'Integer') {
                     uniDataTableFields.setField(fieldName, +value);
                 } else if (type === 'UniData') {
-                    uniDataTableFields.setField(fieldName, MarshallerUtils.unidata.deserialize(value));
+                    uniDataTableFields.setField(fieldName, require('app/common/marshallers/uni-data').deserialize(value));
                 } else if (type === 'UniDataTable') {
                     uniDataTableFields.setField(fieldName, UniDataTableMarshaller.deserialize(value));
                 } else if (type === 'Date' || type === 'Timestamp' || type === 'TimezonelessDate' || type === 'JsDate') {
-                    uniDataTableFields.setField(fieldName, MarshallerUtils.date.deserialize(value));
+                    uniDataTableFields.setField(fieldName, DateMarshaller.deserialize(value));
                     type = 'Date';
                 } else if (type === 'HashMap') {
                     uniDataTableFields.setField(fieldName, new HashMap(value));

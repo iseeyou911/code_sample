@@ -1,5 +1,11 @@
 /**
  * Created by Timofey Novitskiy on 27.04.2015.
+ *
+ * @name MenuService
+ *
+ * @description
+ * Сервис для управления контекстными меню
+ *
  */
 define([],
     function () {
@@ -12,8 +18,6 @@ define([],
          *
          */
         function MenuService($timeout) {
-            var self = this;
-
             this.menus = {};
             this.$timeout = $timeout;
 
@@ -23,35 +27,34 @@ define([],
         }
 
         /**
-         * Initialization of menu
+         * Initialization of menu, place menu node to menus container
          *
          * @param {MenuController} menuController
-         * @param {DOMNode} element
+         * @param {Function} transcludeFn
          */
-        MenuService.prototype.init = function init (menuController, transcludeFn) {
+        MenuService.prototype.init = function init(menuController, transcludeFn) {
             var self = this,
-                id = idPull++;
+                id = menuController.getId();
 
             this.menus[id] = {
-                id : id,
-                controller : menuController
+                id: id,
+                controller: menuController
             };
 
-            menuController.id = id;
-            transcludeFn(function(clone){
+            transcludeFn(function (clone) {
                 self.menus[id].node = clone;
                 self.menuContainer.append(clone);
-            }, {
-
             });
         };
 
         /**
          * Show menu
          *
+         * @param {Number} id
+         * @param {{pageX, pageY}} event
          * @param {MenuController} menuController
          */
-        MenuService.prototype.show = function show (id, event) {
+        MenuService.prototype.show = function show(id, event) {
             var l = event.pageX,
                 t = event.pageY,
                 self = this,
@@ -61,15 +64,14 @@ define([],
             this.currentMenuId && this.hide(this.currentMenuId);
 
             menuNode.css({
-                'top' : t + 'px',
-                'left' : l + 'px',
-                'zIndex' : 10000000
+                'top': t + 'px',
+                'left': l + 'px',
+                'zIndex': 10000000
             });
 
             node.addClass('open');
 
-
-            $(document).on('click.esft.menu.' + id, function(event){
+            $(document).on('click.esft.menu.' + id, function (event) {
                 self.hide(id);
             });
 
@@ -79,9 +81,10 @@ define([],
         /**
          * Hide menu
          *
-         * @param {MenuController} menuController
+         * @param {Number} id
+         *
          */
-        MenuService.prototype.hide = function hide (id) {
+        MenuService.prototype.hide = function hide(id) {
             var node = this.menus[id].node;
             node.removeClass('open');
             this.currentMenuId = null;
@@ -91,9 +94,10 @@ define([],
         /**
          * Remove menu
          *
-         * @param {MenuController} menuController
+         * @param {Number} id
+         *
          */
-        MenuService.prototype.remove = function remove (id) {
+        MenuService.prototype.remove = function remove(id) {
             var menu = this.menus[id];
             $(document).off('click.esft.menu');
             this.menus[id].node.remove();

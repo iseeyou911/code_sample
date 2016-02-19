@@ -1,5 +1,12 @@
 /**
  * Created by Timofey Novitskiy on 28.04.2015.
+ *
+ * @name eMenuItem
+ *
+ * @description
+ * Директива пункта меню
+ *
+ * @see eMenu
  */
 define([
         'text!./menu-item.tmpl.html'

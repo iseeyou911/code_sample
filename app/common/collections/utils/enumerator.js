@@ -2,9 +2,11 @@
  * Created by Timofey Novitskiy on 25.02.2015.
  */
 
-define([],
-    function () {
-        function Enumerator (obj) {
+define([
+        'app/common/exceptions/no-such-element.exception'
+    ],
+    function (NoSuchElementException) {
+        function Enumerator(obj) {
             var keys = Object.keys(obj),
                 iterator = -1;
 
@@ -14,12 +16,12 @@ define([],
 
             this.nextElement = function nextElement() {
                 if (!this.hasMoreElements()) {
-                    throw 'NoSuchElementException';
+                    throw new NoSuchElementException;
                 }
                 iterator++;
                 return keys[iterator];
             };
-        };
+        }
 
         return Enumerator;
     });

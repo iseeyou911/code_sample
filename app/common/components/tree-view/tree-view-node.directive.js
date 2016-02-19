@@ -1,5 +1,10 @@
 /**
  * Created by Timofey Novitskiy on 17.02.2015.
+ *
+ * @name eTreeViewNode
+ *
+ * @description элемент @see eTreeView
+ *
  */
 
 define([
@@ -24,11 +29,16 @@ define([
                     return function(scope, iElement, iAttr, ctrls, transclude) {
                         var
                             treeViewCtrl = ctrls[0],
-                            parentTreeNode = ctrls[1];
+                            parentTreeNode = ctrls[1],
+                            clone,
+                            tScope;
 
-                        iElement.append($compile(template, transclude, undefined, undefined, scope.$parent)(scope));
+                        $compile(template, transclude)(scope, function(_clone, scope){
+                            iElement.append(_clone);
+                            clone = _clone;
+                        });
 
-                        scope.opened = scope.$item.opened;
+                        scope.opened = treeViewCtrl.isOpened(scope.$item);
 
                         scope.getChildren = function() {
                             var item = scope.$item;
@@ -46,6 +56,10 @@ define([
                                 scope.opened = !scope.opened;
                             }
                         };
+
+                        scope.$on('$destroy', function(){
+                            iElement.remove();
+                        });
                     };
                 }
             };

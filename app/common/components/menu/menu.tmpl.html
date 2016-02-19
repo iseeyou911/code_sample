@@ -1,7 +1,12 @@
-<div class="e-menu" e-menu-transcluder="">
-    <ul class="dropdown-menu" role="menu" >
-        <li role="presentation" ng-repeat="item in items" e-menu-item="item" ng-click="onSelectMenuItem(item)" ng-if="item.isVisible()">
-
+<div class="e-menu"
+     e-menu-transcluder="">
+    <ul class="dropdown-menu"
+        role="menu" >
+        <li role="presentation"
+            ng-repeat="item in items"
+            e-menu-item="item"
+            ng-click="onSelectMenuItem(item)"
+            ng-if="_isVisible(item)">
         </li>
     </ul>
 </div>

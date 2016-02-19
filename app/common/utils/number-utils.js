@@ -6,7 +6,7 @@ define([],
     function () {
 
         Number.prototype.equals = function equals (number) {
-            return this.valueOf() == number;
+            return this.valueOf() === number;
         };
 
         function NumberUtils () {

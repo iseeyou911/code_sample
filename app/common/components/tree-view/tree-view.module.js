@@ -3,9 +3,10 @@
  */
 define([
     'app/common/components/tree-view/tree-view.directive',
-    'app/common/components/tree-view/tree-view-node.directive'
-],function (TreeViewDirective, TreeViewNodeDirective) {
+    'app/common/components/tree-view/tree-view-node.directive',
+    'angular'
+],function (TreeViewDirective, TreeViewNodeDirective, angular) {
     angular.module('common.components.tree-view', [])
         .directive('eTreeViewNode', TreeViewNodeDirective)
-        .directive('eTreeView', TreeViewDirective);
+        .directive(TreeViewDirective.$name, TreeViewDirective);
 });

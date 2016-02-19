@@ -1,5 +1,29 @@
 /**
  * Created by Timofey Novitskiy on 13.03.2015.
+ *
+ * @name PopupService
+ *
+ * @description
+ * Сервис для создания и управления попапами
+ *
+ * @example
+ `
+ var popup = PopupService.create(id, {
+                        isModal: true,
+                        size: 'lg',
+                        controllers: function () {
+                            return {
+                                'prntCtrl': instance
+                            }
+                        }
+                    },
+ {
+     text: 'Text'
+ }, '<div id="modal-content">{{context.text}}</div>', 'Title');
+
+ popup.show();
+ popup.hide();
+ `
  */
 
 define([],
@@ -18,24 +42,45 @@ define([],
             }
         }
 
-        PopupService.prototype.show = function show (popup) {
-            popup.popup.modal('show');
+        PopupService.prototype.show = function show (id) {
+            var popup = this.popups[id];
+            popup && popup.show();
         };
 
-        PopupService.prototype.hide = function hide (popup) {
-            popup.popup.modal('hide');
+        PopupService.prototype.hide = function hide (id) {
+            var popup = this.popups[id];
+            popup && popup.hide();
         };
 
-        PopupService.prototype.toggle = function toggle (popup) {
-            popup.popup.toggle();
+        PopupService.prototype.toggle = function toggle (id) {
+            var popup = this.popups[id];
+            popup && popup.toggle();
         };
 
-        PopupService.prototype.destroy = function destroy (popup) {
-            popup.destroy();
+        PopupService.prototype.destroy = function destroy (id) {
+            var popup = this.popups[id];
+            popup && popup.destroy();
         };
 
+        /**
+         *
+         * remove popup from cache, call automaticaly by popup directive
+         *
+         * @param {ePopupController} popup
+         * @private
+         */
         PopupService.prototype._remove = function _remove (popup) {
-            delete this.popups[popup.id];
+            delete this.popups[popup.getId()];
+        };
+
+        /**
+         * add popup to cache, call automaticaly by popup directive
+         *
+         * @param {ePopupController} popup
+         * @private
+         */
+        PopupService.prototype._add = function _add (popup) {
+            this.popups[popup.getId()] = popup;
         };
 
         /**
@@ -48,10 +93,7 @@ define([],
          * @returns {Popup}
          */
         PopupService.prototype.create = function create (id, attrs, context, template, title) {
-            var popup = this.getPopupFactory().create(id, attrs, context, template, title);
-
-            this.popups[popup.id] = popup;
-            return popup;
+            return this.getPopupFactory().create(id, attrs, context, template, title);
         };
 
         return PopupService;

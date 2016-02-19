@@ -1,14 +1,15 @@
 <li role="presentation"
-    ng-click="tab.activate(); needToReloadLayout && reloadLayout()"
-    ng-class="{'active' : tab.isActive(), 'loading' : tab.loading}">
+    class="e-tab-item"
+    ng-click="ctrl().activate($tab); needToReloadLayout && reloadLayout()"
+    ng-class="{'active' : ctrl().isActive($tab), 'loading' : ctrl().isLoading($tab)}">
 
-    <a ui-sref="$.portal.platform">
+    <a ui-sref="$.portal.platform" ng-click="$event.preventDefault()">
         <span class="tab-content" >
-        <span tab-content></span>
+                <span tab-content></span>
             </span>
         <i
                 ng-if="isClosable"
-                ng-click="$event.preventDefault(); tab.close();"
+                ng-click="$event.preventDefault(); ctrl().onClose($tab);"
                 class="fa fa-close close-btn"></i>
     </a>
 </li>

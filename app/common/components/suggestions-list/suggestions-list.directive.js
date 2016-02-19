@@ -1,5 +1,34 @@
 /**
  * Created by Timofey Novitskiy on 30.04.2015.
+ *
+ * @name eSuggestionsList
+ *
+ * @description
+ * директива отображения списка подстановок, поддерживает
+ * пользовательские шаблоны для элементов списка, поддерживает
+ * управление с клавитатуры
+ *
+ * @param {Array} eSuggestionsList элементы списка
+ * @param {Boolean} isVisible скрыть\показать список
+ * @param {Expression} onSelect колбек, вызываемый при выборе элемента,
+ * в него передается выбранное значение $item
+ * @param {Expression} onBlur колбэк, вызываемый при потери фокуса при вызове
+ * доступен параметр $event
+ * @param {Expression} onHide колбэк, вызываемый при закрытии списка
+ *
+ * @example
+ *
+ `
+ <div
+ e-suggestions-list="template.suggestions"
+ on-select="onSelectSuggestion($item)"
+ on-hide="onHideSuggestionsList($event)"
+ is-visible="template.showSuggestionsList">
+    <h4 class="list-group-item-heading">{{$item.text}}</h4>
+    <p class="list-group-item-text" ng-if="$item.description">{{$item.description}}</p>
+ </div>
+ `
+ *
  */
 define([
         'text!./suggestions-list.tmpl.html'
@@ -38,6 +67,7 @@ define([
 
                     scope.$on('$destroy', function(){
                         $(document).off('click.' + scope.elementId);
+                        element.remove();
                     });
 
                     scope.$watch('isVisible', function(value){

@@ -4,7 +4,7 @@
 define([
     'app/common/components/popup/popup.factory',
     'app/common/components/popup/popup.srv',
-    'app/common/components/popup/popup.directive',
+    'app/common/components/popup/popup.directive'
 ], function(PopupFactory, PopupService, PopupDirective){
     angular.module('common.components.popup', [])
         .service('PopupService', PopupService)

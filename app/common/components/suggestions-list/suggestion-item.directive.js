@@ -1,5 +1,11 @@
 /**
  * Created by Timofey Novitskiy on 30.04.2015.
+ *
+ * @name eSuggestionItem
+ *
+ * @description директива элемента списка
+ *
+ * @see eSuggestionsList
  */
 define([],
     function () {

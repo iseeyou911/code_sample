@@ -1,20 +1,20 @@
-<div class="container-fluid e-tabs-panel">
+<div class="e-tabs-panel">
     <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="collapse navbar-collapse tabs-container" role="navigation">
-        <ul class="nav navbar-nav tabs-wrapper">
+    <div class="tabs-container" role="navigation">
+        <ul class="nav e-navbar-nav tabs-wrapper">
             <li
                     e-tab="tab"
-                    ng-if="tab.isVisible()"
+                    ng-if="tabsController.isVisible(tab)"
                     is-closable="isClosable"
                     ng-repeat="(id, tab) in tabsController.visibleTabs">
             </li>
         </ul>
 
-
     </div>
-    <ul class="nav navbar-nav navbar-right tabs-menu-btn" ng-show="tabsController.hiddenTabs.length > 0">
+    <ul class="nav navbar-right tabs-menu-btn" ng-show="tabsController.hiddenTabs.length > 0">
         <li class="dropdown">
             <a
+                    ng-click="$event.preventDefault()"
                     href="#"
                     class="dropdown-toggle"
                     data-toggle="dropdown"
@@ -23,7 +23,7 @@
                     aria-expanded="false">
                 <i class="fa fa-angle-double-down"></i> <sup>{{tabsController.hiddenTabs.length}}</sup>
                     </span></a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu right">
                 <li
                         e-tab="tab"
                         need-to-reload-layout="true"

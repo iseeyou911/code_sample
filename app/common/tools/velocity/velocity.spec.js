@@ -1,5 +1,5 @@
 /**
- * Created by god on 28.04.2015.
+ * Created by Timofey Novitskiy on 28.04.2015.
  */
 define([
     'app/common/tools/velocity/velocity'

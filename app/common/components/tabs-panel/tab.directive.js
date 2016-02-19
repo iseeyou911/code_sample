@@ -1,5 +1,10 @@
 /**
  * Created by Timofey Novitskiy on 16.04.2015.
+ *
+ * @name eTab
+ *
+ * @description вкладка, @see eTabsPanel
+ *
  */
 define([
         'text!./tab.tmpl.html'
@@ -13,17 +18,28 @@ define([
                 template: template,
                 restrict: 'A',
                 scope: {
-                    tab: '=eTab',
-                    isClosable : '=',
-                    needToReloadLayout : '@'
+                    $tab: '=eTab',
+                    isClosable: '=',
+                    needToReloadLayout: '@'
                 },
-                replace : true,
+                replace: true,
                 require: '^eTabsPanel',
                 link: function link(scope, tElement, tAttrs, controller) {
-                    controller.transcludeFn(scope, function(clone){
+                    var node;
+                    controller.transcludeFn(scope, function (clone) {
+                        node = clone;
                         tElement.find('[tab-content]').replaceWith(clone);
                     });
-                    scope.reloadLayout = function reloadLayout(){
+
+                    scope.ctrl = function () {
+                        return controller;
+                    };
+
+                    scope.$on('$destroy', function () {
+                        node.remove();
+                    });
+
+                    scope.reloadLayout = function reloadLayout() {
                         controller.layout();
                     }
                 }

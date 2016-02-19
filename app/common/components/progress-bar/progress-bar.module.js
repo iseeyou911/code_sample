@@ -1,5 +1,5 @@
 /**
- * Created by god on 02.11.2015.
+ * Created by Timofey Novitskiy on 02.11.2015.
  */
 define([
     'app/common/components/progress-bar/progress-bar.service',

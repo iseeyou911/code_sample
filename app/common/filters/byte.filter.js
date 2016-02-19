@@ -11,13 +11,21 @@ define(['sprintf'],
         function ByteFilter() {
             return function ByteFilter (bytes, si) {
                 var pre, exp, unit = si ? 1000 : 1024;
-                if (bytes < unit) return bytes + " B";
+
+                if (bytes == null) {
+                    return '0 B';
+                }
+
+                if (bytes < unit) {
+                    return bytes + " B";
+                }
+
                 exp = Math.floor(Math.log(bytes) / Math.log(unit));
                 pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
-                return sprintf.sprintf("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+                return sprintf("%.1f %sB", bytes / Math.pow(unit, exp), pre);
             }
 
         }
 
-        return ByteFilter
+        return ByteFilter;
     });

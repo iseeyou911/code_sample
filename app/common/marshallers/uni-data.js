@@ -5,8 +5,9 @@ define([
     'app/common/marshallers/marshaller-factory',
     'app/core/uni-data/uni-data',
     'app/common/marshallers/uni-data-table-fields',
-    'app/common/marshallers/uni-client-data'
-], function (MarshallerFactory, UniData, UniDataTableFieldsMarshaller, UniClientDataMarshaller) {
+    'app/common/marshallers/uni-client-data',
+    '_'
+], function (MarshallerFactory, UniData, UniDataTableFieldsMarshaller, UniClientDataMarshaller, _) {
     return MarshallerFactory(
         /*Serialize*/
         function (uniData) {
@@ -37,13 +38,13 @@ define([
 
             uniData.replace(fields, 4);
 
-            angular.forEach(jsonData.fields.fieldAttributes || {}, function (attrs, field) {
-                angular.forEach(attrs, function (value, name) {
+            _.forEach(jsonData.fields.fieldAttributes || {}, function (attrs, field) {
+                _.forEach(attrs, function (value, name) {
                     uniData.setFieldAttribute(field, name, value);
                 });
             });
 
-            angular.forEach(jsonData.fields.errors || {}, function (error, field) {
+            _.forEach(jsonData.fields.errors || {}, function (error, field) {
                 uniData.setFormError(field, error);
             });
 

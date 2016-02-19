@@ -1,92 +1,143 @@
 /**
  * Created by Timofey Novitskiy on 17.02.2015.
+ *
+ * @name eTreeView
+ *
+ * @description компонент дерева, поддерживает пользовательские шаблоны для элементов
+ *
+ * @param {Expression} isOpened выражение должно возвращать true если элемент расскрыт по умолчанию
+ * @param {Expression} hasChildren выражение должно возвращать true если у элемента
+ * есть потомки и false если нет, в выражение передается аргумент $item - текущий элемент
+ * @param {Expression} getChildren выражение должно возвращать список потомков элемента, в
+ * выражение передается аргумент $item - текущий элемент
+ * @param {Array} eTreeView список элементов верхнего уровня
+ * @param {Expression} filter функция фильтрации элементов, получает два параметра:
+ *      $items - список элементов
+ *      $filter - текущий фильтр должна вернуть отфильтрованный список элементовю
+ * @param {String} filterValue свойство скопа содержащее значение текущего фильтра
+ * @param {Expression} onSelect выражение, вызваемое при клике на элемент, получает параметры:
+ *      $item - текущий элемент
+ *      $parent - родительский элемент
+ *      $index - номер текущего элемента
+ *      $event - событие клика
+ * Если выражение вернет false, то элемент списка не расскроетеся
+ * @param {parentController} родительский контролер, если необходимо вызывать какие либо
+ * методы из контролера элемента в который вставляется дерево, можно использовать этот параметр
+ *
+ *
+ * @example
+ *
+ `
+ <div class="menu-tree"
+    get-children="$item.children"
+    parent-controller="platformController"
+    has-children="$item.children.length > 0"
+    on-select="platformController.onSelectMenuItem($item, $parent, $index, $event)"
+    e-tree-view="platformController.menu.elements">
+        <span class="menu-tree-element"
+            ng-click="$event.preventDefault()"
+            ng-class="{'has-icon' : !!$item.icon,
+            active: parentController.isActiveWindow($item.branchId, $item.fid)}">
+            <span title="{{::$item.name}}"
+                    class="menu-icon"
+                    ng-bind-html="::$item.icon"></span></i>
+            <span ng-if="!parentController.isSideBarHidden()">{{::$item.name}}</span>
+            <sup ng-show="$item.count">({{$item.count}})</sup>
+        </span>
+ </div>
+ `
+ *
  */
 
 define([
         'text!./tree-view.tmpl.html',
-        'app/common/utils/string-utils'
+        'app/common/utils/string-utils',
+        'angular'
     ],
-    function (template, StringUtils) {
-        ETreeView.$inject = ['$compile', '$parse'];
-
+    function (template, StringUtils, angular) {
+        ETreeView.$inject = [];
+        ETreeView.$name = 'eTreeView';
         /**
          *
          */
-        function ETreeView ($compile, $parse) {
+        function ETreeView() {
             return {
-                scope : true,
-                restrict : 'A',
-                template : template,
-                transclude : true,
-                controllerAs : 'eTreeViewController',
-                require : ['eTreeView', '?ngModel'],
-                controller : ['$scope', function($scope) {
-                    var ngModelCtrl, onSelect, filter,
-                        self = this, getChildren, hasChildren;
+                restrict: 'A',
+                template: template,
+                transclude: true,
+                controllerAs: 'eTreeViewController',
+                require: ['eTreeView', '?ngModel'],
+                scope: {
+                    isOpened: '&',
+                    hasChildren: '&',
+                    filter: '&',
+                    items: '=eTreeView',
+                    getChildren: '&',
+                    filterValue: '=',
+                    onSelect: '&',
+                    parentController: '='
+                },
+                controller: ['$scope', function ($scope) {
+                    var ngModelCtrl;
 
-                    this.init = function(_ngModelCtrl, _onSelect,
-                                         _getChildren, _hasChildren, _filter) {
+                    this.init = function init(_ngModelCtrl) {
                         ngModelCtrl = _ngModelCtrl;
-                        onSelect = _onSelect;
-                        getChildren = _getChildren;
-                        hasChildren = _hasChildren;
-                        filter = _filter;
                     };
 
-                    this.getChildren = function(item) {
-                        return getChildren ? getChildren($scope, {$item : item}) : item.children;
-                    };
-
-                    this.hasChildren = function(item) {
-                        return hasChildren ? hasChildren($scope, {$item : item}) : item.children && item.children.length > 0;
-                    };
-
-                    this.applyFilter = function applyFilter(filterValue) {
-                        $scope.filteredItems = filter($scope, {
-                            $items : $scope.items,
-                            $filter : filterValue
+                    this.getChildren = function getChildren(item) {
+                        return $scope.getChildren({
+                            $item: item
                         });
                     };
 
-                    this.select = function(item, parent, index, event) {
+                    this.isOpened = function isOpened(item) {
+                        return $scope.isOpened({
+                            $item: item
+                        });
+                    };
+
+                    this.hasChildren = function hasChildren(item) {
+                        return $scope.hasChildren({
+                            $item: item
+                        });
+                    };
+
+                    this.applyFilter = function applyFilter() {
+                        var filteredElements = $scope.filter({
+                            $items: $scope.items,
+                            $filter: $scope.filterValue
+                        });
+
+                        $scope.filteredItems = filteredElements == null ? $scope.items : filteredElements;
+                    };
+
+                    this.select = function select(item, parent, index, event) {
                         ngModelCtrl && ngModelCtrl.$setViewValue(item);
-                        return onSelect($scope, {
-                            $item : item,
-                            $parent : parent,
-                            $index : index,
-                            $event : event
+                        return $scope.onSelect({
+                            $item: item,
+                            $parent: parent,
+                            $index: index,
+                            $event: event
                         });
                     };
                 }],
 
-                link : function($scope, iElement, iAttr, ctrls) {
+                link: function (scope, iElement, iAttr, ctrls) {
                     var treeViewCtrl = ctrls[0],
-                        ngModelCtrl = ctrls[1],
-                        onSelect = $parse(iAttr.onSelect),
-                        filter = $parse(iAttr.filter),
-                        getChildren = iAttr.getChildren && $parse(iAttr.getChildren),
-                        hasChildren = iAttr.hasChildren && $parse(iAttr.hasChildren),
-                        filterValue = $parse(iAttr.filterValue);
+                        ngModelCtrl = ctrls[1];
 
-                    treeViewCtrl.init(ngModelCtrl, onSelect, getChildren, hasChildren, filter);
+                    treeViewCtrl.init(ngModelCtrl);
 
-                    $scope.isChild = function(item) {
-                        return item.isFolder;
-                    };
-
-                    iAttr.$observe('filterValue', function(value){
-                        $scope.items && treeViewCtrl.applyFilter(value);
+                    scope.$watch('filterValue', function () {
+                        scope.items && treeViewCtrl.applyFilter();
                     });
 
-                    $scope.$watch(iAttr.eTreeView, function(newValue, oldValue) {
-                        if (newValue && !angular.isArray(newValue)) {
-                            newValue = [newValue];
-                        } else if (!newValue){
-                            newValue = [];
-                        }
+                    scope.$watch('items', function (newValue, oldValue) {
+                        treeViewCtrl.applyFilter();
+                    });
 
-                        $scope.items = newValue;
-                        treeViewCtrl.applyFilter(filterValue($scope));
+                    scope.$on('$destroy', function(){
+                        iElement.remove();
                     });
                 }
             };

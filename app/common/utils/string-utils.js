@@ -8,11 +8,18 @@ define([],
         String.prototype.equals = function equals (str) {
             return this.toString() === str;
         };
+
         String.prototype.trim = function trim () {
-            return StringUtils.prototype.trim(this);
+            return StringUtils.prototype.trim(this.toString());
         };
+
         String.prototype.replaceAll = function replaceAll(regexp, replaceText) {
-            return this.toString().replace(new RegExp(regexp), replaceText);
+            if (regexp instanceof RegExp) {
+                regexp = RegExp(regexp, regexp.flags + 'gm');
+            } else if (typeof regexp === 'string' || typeof regexp === 'number') {
+                regexp = RegExp(regexp, 'mg');
+            }
+            return this.toString().replace(regexp, replaceText);
         };
 
         String.prototype.replaceFirst = function replaceFirst(from, replaceText) {
@@ -20,15 +27,15 @@ define([],
         };
 
         String.prototype.isEmpty = function isEmpty () {
-            return StringUtils.prototype.isEmpty(this);
+            return StringUtils.prototype.isEmpty(this.toString());
         };
 
         String.prototype.isNotEmpty = function isNotEmpty () {
-            return StringUtils.prototype.isNotEmpty(this);
+            return StringUtils.prototype.isNotEmpty(this.toString());
         };
 
         String.prototype.contains = function contains (substr) {
-            return !!this.match((substr || '').replace(/\./g, '\\.'));
+            return !!this.toString().match((substr || '').replace(/\./g, '\\.'));
         };
 
         function StringUtils () {
@@ -55,5 +62,6 @@ define([],
             }
             return str.replace(/^[\s\t]*/, '').replace(/[\s\t]*$/, '');
         };
+
         return new StringUtils();
     });

@@ -1,8 +1,8 @@
 /**
  * Created by Timofey Novitskiy on 26.10.2015.
  */
-define([],
-    function () {
+define(['_'],
+    function (_) {
         var idGen = 0;
         FileDownloaderService.$inject = ['$rootScope', '$document', '$q', '$interval', '$http'];
         FileDownloaderService.$name = 'FileDownloader';
@@ -56,6 +56,11 @@ define([],
             } else {
                 body = document.body;
             }
+            iframe
+            .appendChild(document.createElement('head'))
+            .appendChild(document.createElement('meta'))
+            .setAttribute('charset', 'utf-8');
+
             form = body
                 .appendChild(document.createElement('form'));
 
@@ -64,8 +69,9 @@ define([],
             form.method = method;
             form.action = action;
             form.target = '_self';
+            form.setAttribute('charset', 'utf-8');
 
-            angular.forEach(data, function (value, key) {
+            _.forEach(data, function (value, key) {
                 var
                     input = form.appendChild(document.createElement('input'));
 

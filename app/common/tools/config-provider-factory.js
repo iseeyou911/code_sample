@@ -2,17 +2,17 @@
  * Created by Timofey Novitskiy on 04.02.2015.
  */
 
-define([], function () {
+define(['_'], function (_) {
     return function ConfigProviderFactory (defaultConfig) {
         return function ConfigProvider () {
             var params, service;
-            params = angular.extend({}, defaultConfig || {});
+            params = _.assign({}, defaultConfig || {});
 
             service = {
                 set: function (paramsObjOrParamName, value) {
-                    if (angular.isString(paramsObjOrParamName) && arguments.length === 2) {
+                    if (_.isString(paramsObjOrParamName) && arguments.length === 2) {
                         params[paramsObjOrParamName] = value;
-                    } else if (angular.isObject(paramsObjOrParamName)) {
+                    } else if (_.isObject(paramsObjOrParamName)) {
                         set(paramsObjOrParamName);
                     }
                 },
@@ -22,7 +22,7 @@ define([], function () {
             };
 
             function set(_params) {
-                angular.extend(params, _params);
+                _.assign(params, _params);
             }
 
             return {

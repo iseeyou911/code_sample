@@ -3,17 +3,20 @@
  */
 
 define([
-        'app/common/directives/form/fields-ident-validation.directive',
-        'app/common/directives/form/email-validation.directive',
+        'app/common/directives/form/is-ident.validator.directive',
+        'app/common/directives/form/is-email.validator.directive',
         'app/common/directives/form/io-file.directive',
         'app/common/directives/transclude-to.directive',
-        'app/common/directives/is-dirty.directive'
+        'app/common/directives/form/is-dirty.directive',
+        'app/common/directives/mask/mask.module'
     ],
-    function (IsIdentValidation, EmailValidation, ioFileDirective, TranscludeToDirective, isDirtyDirective) {
-        angular.module('common.directives', [])
+    function (IsIdentValidation, isEmail, ioFileDirective, TranscludeToDirective, isDirtyDirective) {
+        angular.module('common.directives', [
+                'common.directives.mask'
+        ])
             .directive('isIdent', IsIdentValidation)
             .directive('ioFile', ioFileDirective)
-            .directive('isEmail', EmailValidation)
+            .directive(isEmail.$name, isEmail)
             .directive(isDirtyDirective.$name, isDirtyDirective)
             .directive(TranscludeToDirective.$name, TranscludeToDirective);
     });

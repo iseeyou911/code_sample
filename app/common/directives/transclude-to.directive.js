@@ -1,8 +1,37 @@
 /**
  * Created by Timofey Novitskiy on 28.04.2015.
+ *
+ * @name eTranscludeTo
+ *
+ * @description
+ *
+ * Директива позволяет трансклюдировать (перенести) узел (domnode) в другой узел/узлы.
+ * Поиск нового родительского узла осуществляется с помощью jQuery селектора.
+ * В случае если селектор соответсвует нескольким узлам, трансклюдируемый узел будет
+ * клонирован во все найденные узлы. Если селектор отсутствует, то трансклюдируемый узел
+ * будет оставлен на прежнем месте. С помощью атрибута parent-controller можно передать
+ * экземпляры родительских контроллеров, необходимые внутренним директивам.
+ *
+ * @param {String|{{Expression}}} eTranscludeTo селектор
+ * @param {{{ctrlInstance}ctrlName...}} parentController список родительских контроллеров
+ *
+ * @example
+ *
+ `
+ <div id="" parent-controllers="{dir0: dir0Ctrl}">
+ <div dir2="" ></di"></div>
+ <div dir0="">
+    <div dir1="">
+        <div e-transclude-to="#transcludeHere" parent-controllers="{dir0: dir0Ctrl}">
+            <div dir2="" ></div>
+        </div>
+    </div>
+ </div>
+ `
+ *
  */
-define([],
-    function () {
+define(['_'],
+    function (_) {
         TranscludeToDirective.$inject = ['$compile'];
         TranscludeToDirective.$name = 'eTranscludeTo';
         /**
@@ -10,47 +39,51 @@ define([],
          */
         function TranscludeToDirective($compile) {
             return {
-                transclude: true,
-                require: ['^?eWindow'],
+                transclude: 'element',
+                scope: {
+                    parentControllers: '='
+                },
                 controller: function () {
                 },
                 link: function link(scope, element, attrs, controllers, transclude) {
-                    var currentElement, linker,
-                        selector = attrs[TranscludeToDirective.$name];
+                    var elementsToRemove = [],
+                        scopesToDestroy = [],
+                        selector = attrs[TranscludeToDirective.$name],
+                        container = $(attrs[TranscludeToDirective.$name]);
 
                     if (selector) {
-                        linker = $compile('<div></div>');
-                        linker(scope, function (parentClone, scope) {
-                            transclude(function (clone) {
-                                var container = $(attrs[TranscludeToDirective.$name]);
-
-                                if (container.length === 1) {
-                                    container.append(parentClone);
-                                    parentClone.append(clone);
-                                    currentElement = parentClone;
-                                } else {
-                                    element.append(clone);
-                                    currentElement = clone;
-                                }
+                        container.each(function (index, node) {
+                            transclude(function (clone, _scope) {
+                                bindParentControllers(clone);
+                                container.append(clone);
+                                elementsToRemove.push(clone);
+                                scopesToDestroy.push(_scope);
                             });
-                        }, {
-                            transcludeControllers: {
-                                eWindow: {
-                                    instance: controllers[0]
-                                }
-                            }
                         });
+
                     } else {
-                        transclude(function (clone) {
-                            element.append(clone);
-                            currentElement = clone;
+                        transclude(function (clone, _scope) {
+                            bindParentControllers(clone);
+                            element.after(clone);
+                            elementsToRemove.push(clone);
+                            scopesToDestroy.push(_scope);
                         });
                     }
 
-
                     scope.$on('$destroy', function (event) {
-                        currentElement && currentElement.remove()
+                        elementsToRemove.forEach(function (element) {
+                            element.remove();
+                        });
+                        scopesToDestroy.forEach(function (_scope) {
+                            _scope.$destroy();
+                        });
                     });
+
+                    function bindParentControllers (node) {
+                        _.map(scope.parentControllers, function (instance, controllerName) {
+                            node.data('$' + controllerName + 'Controller', instance);
+                        });
+                    }
                 }
             }
         }

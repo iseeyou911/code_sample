@@ -1,5 +1,5 @@
 /**
- * Created by god on 12.11.2015.
+ * Created by Timofey Novitskiy on 12.11.2015.
  */
 define([
     '../../utils/object-utils',
