@@ -5,6 +5,7 @@
 [`jQuery`](https://jquery.com/)
 [`RequireJS`](http://requirejs.org/)
 [`FontAwesome`](https://fortawesome.github.io/Font-Awesome/)
+[`Bootstrap`](http://getbootstrap.com/)
 
 #License
 
