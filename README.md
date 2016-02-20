@@ -45,7 +45,7 @@ Usefull angular components, examples of usage and descriptions you may find in j
 
 `app/common/components/direcitves/linker-directive-facotry` Factory for link directives. Link directive make possible to get access to controller of some directive from parent directive controller, i.e. `<div dir1=""><div dir2="" linker="$link"></div></div>` in the case controller of dir2 will passed to $link function of controller dir1.
 
-`app/common/components/direcitves/transclude-to` Directive perform transclude of hole element to another dom node. Supports jquiery selector syntax to find target node, multiple transcluding and parent controllers, in case if you make transclude simple node with child directives, that required some parent controller;
+`app/common/components/direcitves/transclude-to` Directive perform transclude of whole element to another dom node. Supports jquiery selector syntax to find target node, multiple transcluding and parent controllers, in case if you make transclude simple node with child directives, that required some parent controller;
 
 `app/common/components/direcitves/form/io-file` Simple directive for input[type=file] make access to file list from scope
 
